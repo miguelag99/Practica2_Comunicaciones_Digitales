@@ -19,7 +19,7 @@ def DecodificadorRepeticion(codigo,n):
 
     for i in range(n_bits):
         data = codigo[(n*i):(n*(i+1))]
-
+        print(data)
         if((sum(data)/n)>0.5):
             bit = 1
         elif((sum(data)/n)<0.5):
@@ -35,8 +35,10 @@ def Canal(codigoTx,p):
 
     codigoRx = []
     prob = [0]*int((1-p)*1000)+[1]*int(p*1000)  #Generamos la probabilidad utilizando una lista
-
+    print(prob)
+    random.shuffle(prob)
     for bit in codigoTx:
+        
         if(random.choice(prob)):
             codigoRx.append(bit^1)
         else:
