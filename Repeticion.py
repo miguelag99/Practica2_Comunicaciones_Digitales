@@ -1,5 +1,6 @@
 import random
 
+
 def CodificadorRepeticion(bits,n):
     #A partir de un array de 1xN bits se genera un array de 1x(nN)
 
@@ -19,12 +20,13 @@ def DecodificadorRepeticion(codigo,n):
 
     for i in range(n_bits):
         data = codigo[(n*i):(n*(i+1))]
-        print(data)
+        
         if((sum(data)/n)>0.5):
             bit = 1
+            
         elif((sum(data)/n)<0.5):
             bit = 0
-
+        
         bits.append(bit)
 
     return bits
@@ -34,15 +36,15 @@ def Canal(codigoTx,p):
     #Simulamos los errores introducidos por un canal
 
     codigoRx = []
-    prob = [0]*int((1-p)*1000)+[1]*int(p*1000)  #Generamos la probabilidad utilizando una lista
-    print(prob)
-    random.shuffle(prob)
-    for bit in codigoTx:
+ 
+
+    for i in range(len(codigoTx)):
+        err = random.choices([0,1],[(1-p),p])
         
-        if(random.choice(prob)):
-            codigoRx.append(bit^1)
+        if(err == [1]):
+            codigoRx.append(int(codigoTx[i])^1)
         else:
-            codigoRx.append(bit)
+            codigoRx.append(int(codigoTx[i]))
 
     return codigoRx
 

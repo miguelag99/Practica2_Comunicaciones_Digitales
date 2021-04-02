@@ -15,10 +15,10 @@ def main():
 
     if(args.number == 1): #Códigos de repetición
         print('Ejemplo de codigos de repeticion:\n')
-
+        
         rep_number = 3
         pe = 0.02
-        n_bits = 10000
+        n_bits = 100000
 
         ones = random.randint(0,n_bits)
         zeroes = n_bits-ones
@@ -27,23 +27,27 @@ def main():
 
         print('Primeros 10 bits a codificar y enviar:\n')
         print(data[0:(10*rep_number)])
+        #print(data)
         print('\n')
 
         codigoTx = CodificadorRepeticion(data,rep_number)
         
         print('Codigo con repeticion (primeros 10 valores repetidos):\n')
+        #print(codigoTx)
         print(codigoTx[0:(10*rep_number)])
         print('\n')
         
         codigoRx = Canal(codigoTx,pe)
-        
+
         print('Primeros datos recibidos del canal (se corresponderían con los 10 primeros bits repetidos):\n')
+        #print(codigoRx)
         print(codigoRx[0:(10*rep_number)])
         print('\n')
         
         bits = DecodificadorRepeticion(codigoRx,rep_number)
         
         print('Primeros 10 bits decodificados tras pasar por el canal:\n')
+        #print(bits)
         print(bits[0:(10*rep_number)])
         print('\n')
         
@@ -56,10 +60,11 @@ def main():
         print('Numero de bits erroneos:')
         err = 0
         for i in range(n_bits):
-            err += (data[i]^bits[i])
+            if(data[i]!=bits[i]):
+                err+=1
             
         print(err)
-        err = (err/n_bits)*100
+        err = (err/n_bits)
         print('probabilidad de error en este caso:')
         print(err)
         print('\n')
@@ -67,7 +72,8 @@ def main():
         print('El error teórico para el caso de n = 3 es de:')
         print(t_err)
         print('\n')
-
+        
+       
     elif(args.number == 2):
         print('2')
     elif(args.number == 3):
