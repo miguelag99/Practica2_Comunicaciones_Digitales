@@ -2,8 +2,9 @@
 #Miguel Antunes García
 
 import argparse
+import os
 from Repeticion import *
-
+from Paridad import *
 
 
 def main():
@@ -13,43 +14,40 @@ def main():
     parser.add_argument("-n","--number",help ="Ejemplo que se quiere ejecutar y su explicación (1.Codigos de repeticion 2.Codigos de paridad 3.Codigos bloque)",type =int)
     args = parser.parse_args()
 
+    os.system('cls')
+
+
+    #Generamos un mensaje de nbits para utilizar en los ejercicios
+    n_bits = 100000
+    ones = random.randint(0,n_bits)
+    zeroes = n_bits-ones
+    data = [0]*zeroes + [1]*ones
+    data = random.sample(data,n_bits)
+
     if(args.number == 1): #Códigos de repetición
-        print('Ejemplo de codigos de repeticion:\n')
+        print('Ejercicios de codigos de repeticion:\n')
         
         rep_number = 3
         pe = 0.02
-        n_bits = 100000
+        pri_n = 4
 
-        ones = random.randint(0,n_bits)
-        zeroes = n_bits-ones
-        data = [0]*zeroes + [1]*ones
-        data = random.sample(data,n_bits)
-
-        print('Primeros 10 bits a codificar y enviar:\n')
-        print(data[0:(10*rep_number)])
-        #print(data)
-        print('\n')
+        print('Primeros {} bits a codificar y enviar:'.format(pri_n))
+        print(data[0:pri_n])
 
         codigoTx = CodificadorRepeticion(data,rep_number)
         
-        print('Codigo con repeticion (primeros 10 valores repetidos):\n')
-        #print(codigoTx)
-        print(codigoTx[0:(10*rep_number)])
-        print('\n')
+        print('Codigo con repeticion (primeros {} valores repetidos):'.format(pri_n))
+        print(codigoTx[0:(pri_n*rep_number)])
         
         codigoRx = Canal(codigoTx,pe)
 
-        print('Primeros datos recibidos del canal (se corresponderían con los 10 primeros bits repetidos):\n')
-        #print(codigoRx)
-        print(codigoRx[0:(10*rep_number)])
-        print('\n')
+        print('Primeros datos recibidos del canal:')
+        print(codigoRx[0:(pri_n*rep_number)])
         
         bits = DecodificadorRepeticion(codigoRx,rep_number)
         
-        print('Primeros 10 bits decodificados tras pasar por el canal:\n')
-        #print(bits)
-        print(bits[0:(10*rep_number)])
-        print('\n')
+        print('Primeros {} bits decodificados tras pasar por el canal:'.format(pri_n))
+        print(bits[0:pri_n])
         
         if(bits == data):
             print('Decodificacion correcta (los bits recibidos son los enviados) \n\n')
@@ -67,15 +65,43 @@ def main():
         err = (err/n_bits)
         print('probabilidad de error en este caso:')
         print(err)
-        print('\n')
         t_err = (3*pow(pe,2))-(2*pow(pe,3))
         print('El error teórico para el caso de n = 3 es de:')
         print(t_err)
         print('\n')
+        print('Si el número de bits es suficientemente elevado ambas probabilidades deberían ser similares')
         
        
     elif(args.number == 2):
-        print('2')
+        print('Ejercicios de codigos de paridad:\n')
+        
+        n = 3
+        pe = 0.02
+        pri_n = 5
+
+        print('Primeros {} mensajes a codificar y enviar:'.format(pri_n))
+        print(data[0:((n-1)*pri_n)])
+       
+
+        codigoTx = CodificadorParidad(data,n)
+        print('Codigo conparidad par:')
+        print(codigoTx[0:(n*pri_n)])
+        
+
+        codigoRx = Canal(codigoTx,pe)
+        print('Datos recibidos del canal:')
+        print(codigoRx[0:(n*pri_n)])
+      
+
+        bitsRx = DecodificadorParidad(codigoRx,n)
+        print('Primeros bits decodificados tras pasar por el canal:')
+        print(bitsRx[0:((n-1)*pri_n)])
+      
+
+        
+        
+
+
     elif(args.number == 3):
         print('3')
 
