@@ -3,6 +3,7 @@
 
 import argparse
 import os
+import platform
 from Repeticion import *
 from Paridad import *
 
@@ -14,8 +15,14 @@ def main():
     parser.add_argument("-n","--number",help ="Ejemplo que se quiere ejecutar y su explicación (1.Codigos de repeticion 2.Codigos de paridad 3.Codigos bloque)",type =int)
     args = parser.parse_args()
 
-    os.system('cls')
+    syst = platform.system()
 
+    print(syst)
+
+    if(platform.system() == 'Windows'):
+        os.system('cls')
+    elif(platform.system() == 'Linux'):
+        os.system('clear')
 
     #Generamos un mensaje de nbits para utilizar en los ejercicios
     n_bits = 100000
@@ -97,7 +104,16 @@ def main():
         print('Primeros bits decodificados tras pasar por el canal:')
         print(bitsRx[0:((n-1)*pri_n)])
       
+        print('Numero de bits detectados como erroneos (si ha habido algún error detectado se marcan todos como erroneos) :')
+        err = 0
+        for i in range(n_bits):
+            if(bitsRx[i]==-1):
+                err+=1
+        print("{}\n".format(err))
 
+        err = n*(n-1)*0.5*pow(pe,2)
+
+        print("La probabilidad de que no se haya detectado ningun error (para n = 3 implica que haya 2 bits eroneos) es de:\n{:1.8}".format(err))
         
         
 
