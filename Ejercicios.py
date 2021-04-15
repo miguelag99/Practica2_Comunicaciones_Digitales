@@ -6,7 +6,7 @@ import os
 import platform
 from Repeticion import *
 from Paridad import *
-
+from Bloque import *
 
 def main():
 
@@ -119,7 +119,9 @@ def main():
 
 
     elif(args.number == 3):
-        print('3')
+
+         print('Ejercicios de codigos Hamming:\n')
+         MatricesHamming(3)
 
 
 
