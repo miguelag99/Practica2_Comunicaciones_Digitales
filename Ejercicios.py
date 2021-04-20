@@ -17,8 +17,6 @@ def main():
 
     syst = platform.system()
 
-    print(syst)
-
     if(platform.system() == 'Windows'):
         os.system('cls')
     elif(platform.system() == 'Linux'):
@@ -121,7 +119,9 @@ def main():
     elif(args.number == 3):
 
          print('Ejercicios de codigos Hamming:\n')
-         MatricesHamming(3)
+         (g,h) = MatricesHamming(3)
+         print("Matriz generadora \n{}\n y matriz de comprobacion \n{}\n".format(g,h))
+         
 
 
 
