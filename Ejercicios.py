@@ -121,7 +121,9 @@ def main():
          print('Ejercicios de codigos Hamming:\n')
          (g,h) = MatricesHamming(3)
          print("Matriz generadora \n{}\n y matriz de comprobacion \n{}\n".format(g,h))
-         
+         codigo = CodificadorHamming([0,0,1,1],g)
+         print("Code:{}".format(codigo))
+         bits = DecodificadorHamming(codigo,h)
 
 
 
