@@ -9,7 +9,6 @@ def MatricesHamming(q):
     h = np.zeros((q,k))
     g = np.zeros((k,q))
 
-    print(h)
     I = np.eye(q,q)
     
     values = np.arange(pow(2,q))
@@ -51,9 +50,45 @@ def CodificadorHamming(bits,g):
         
         codigo = np.append(codigo,tr_bit)
     
+    codigo = [int(item) for item in codigo]
+
     return codigo
     
-    #La suma es una xor y el producto es una or
+    
+
+
+class syndrome_table:
+    #Python class donde almacenamos la tabla de sindromes mas probables
+    def __init__(self,q,k,n):
+
+        self.q = q
+        self.k = k
+        self.n = n
+        self.e_val = []
+        self.syndr_val = []
+
+    def __str__(self):
+
+        return("Tabla de sindromes\nq: {}, k: {}, n: {}\nSyndr:{}\nErrors:{}\n".format(self.q,self.k,self.n,self.syndr_val,self.e_val))
+
+    def search_syndrome(self,vector):
+        
+        for i in range(len(self.syndr_val)):
+
+            if (bin_2_dec(self.syndr_val[i]) == bin_2_dec(vector)):
+
+                return (self.e_val[i])
+
+        return([-1])
+
+    def add_sydrome(self,syndr,err_v):
+        
+        self.e_val.append(list(err_v))
+        self.syndr_val.append(list(syndr))
+
+    
+def bin_2_dec(binary):
+    return sum(val*pow(2,idx) for idx, val in enumerate(reversed(binary)))
 
 
 def DecodificadorHamming(codigo,h):
@@ -61,20 +96,53 @@ def DecodificadorHamming(codigo,h):
     k = n - q
 
     max_msg = int(len(codigo)/n)
-    bits = np.array([])
-
-    err_vect = np.eye(n)
-    print(err_vect)
-
+    err = 0
+    err_no_corr = 0
+    bits = []
     
+    err_vect = np.eye(n, dtype = int)    #Todos los vectores de error con menos num de 1
+    
+    table = syndrome_table(q,k,n)
 
+    #Para generar los sindromes correspondientes multiplicamos por H' (s = e*H')
+
+    for i in range(err_vect.shape[0]):
+        
+        s = np.mod(np.dot(err_vect[i,:],np.transpose(h)),2)
+        s = [int(item) for item in s]
+        table.add_sydrome(s,err_vect[i,:])
+
+    #Una vez generada la tabla de sindromes pasamos a reconstruir los bits enviados
+   
+    
     for i in range(max_msg):
 
         code_slice = codigo[i*n:(i+1)*n]
+        syndrome = list(np.mod(np.dot(code_slice,np.transpose(h)),2))
+        syndrome = [int(item) for item in syndrome]
+     
+        
+    
+        #Si el síndrome refleja un error lo buscamos y se corrige si es posible
 
-        syndrome = np.mod(np.dot(code_slice,np.transpose(h)),2)
-        print(syndrome)
-        print(h.shape)
+        if (sum(syndrome) != 0):
+            err += 1
+            e = table.search_syndrome(syndrome)
+          
+            if(len(e)>1):          
+                aux = np.mod(np.add(code_slice,e),2)
+                bits.extend(aux[0:4])
+                
+            
+        else:
+
+            bits.extend(code_slice[0:4])
+
+
+    print("Se han detectado un total de {} errores".format(err))
+    
+    return bits        
+       
 
 
 
