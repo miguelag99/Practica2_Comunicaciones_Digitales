@@ -23,7 +23,7 @@ def main():
         os.system('clear')
 
     #Generamos un mensaje de nbits para utilizar en los ejercicios 
-    n_bits = 2000
+    n_bits = 10000
 
     ones = random.randint(0,n_bits)
     zeroes = n_bits-ones
@@ -180,7 +180,7 @@ def main():
             val = "{}{}{}{}{}{}{}{}".format(bits_slice[0],bits_slice[1],bits_slice[2],bits_slice[3],bits_slice[4],bits_slice[5],bits_slice[6],bits_slice[7])
             text_raw += chr(int(val,2))
         
-        print("Texto sin corrección:\n{}\nSe puede comprobar que se corrigen la mayoría de los errores, aunque algunos no se han detectado o no se han podido corregir".format(text_raw))
+        print("Texto sin corrección:\n{}\n\nSe puede comprobar que se corrigen la mayoría de los errores, aunque algunos no se han detectado o no se han podido corregir".format(text_raw))
         
         
 
